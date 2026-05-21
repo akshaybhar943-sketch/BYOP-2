@@ -1,1 +1,4 @@
-
+Artificial Intelligence is transforming education by helping students learn more efficiently.
+Machine Learning enables computers to learn from data without being explicitly programmed.
+Natural Language Processing helps computers understand human language.
+AI-based educational tools improve productivity and revision.
