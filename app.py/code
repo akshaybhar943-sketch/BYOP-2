@@ -1,1 +1,56 @@
+from flask import Flask, render_template, request
+from transformers import pipeline
 
+app = Flask(__name__)
+
+# AI Summarizer Model
+summarizer = pipeline("summarization")
+
+# Simple Question Answering Logic
+def answer_question(question):
+    question = question.lower()
+
+    if "ai" in question:
+        return "Artificial Intelligence is the simulation of human intelligence by machines."
+
+    elif "ml" in question:
+        return "Machine Learning is a branch of AI that allows systems to learn from data."
+
+    elif "nlp" in question:
+        return "Natural Language Processing helps computers understand human language."
+
+    else:
+        return "Sorry, I do not know the answer."
+
+@app.route("/", methods=["GET", "POST"])
+def home():
+    summary = ""
+    answer = ""
+
+    if request.method == "POST":
+
+        if "notes" in request.form:
+            notes = request.form["notes"]
+
+            if notes.strip() != "":
+                result = summarizer(
+                    notes,
+                    max_length=60,
+                    min_length=20,
+                    do_sample=False
+                )
+
+                summary = result[0]['summary_text']
+
+        if "question" in request.form:
+            question = request.form["question"]
+            answer = answer_question(question)
+
+    return render_template(
+        "index.html",
+        summary=summary,
+        answer=answer
+    )
+
+if __name__ == "__main__":
+    app.run(debug=True)
